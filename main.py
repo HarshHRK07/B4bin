@@ -36,7 +36,7 @@ def generate_and_send_bins():
         bin_info = get_bin_info(bin_number)
         
         if "error" not in bin_info:
-            # Send all BINs to Telegram
+            # Construct the message with the BIN information
             message = (f"Generated BIN: {bin_info['bin']}\n"
                        f"Brand: {bin_info['brand']}\n"
                        f"Country: {bin_info['country_name']} ({bin_info['country_flag']})\n"
@@ -67,3 +67,4 @@ if __name__ == '__main__':
     
     # Start the BIN generation and sending process
     generate_and_send_bins()
+        

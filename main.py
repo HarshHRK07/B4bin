@@ -3,7 +3,7 @@ import random
 from flask import Flask
 
 # Telegram bot token and chat ID (previously provided)
-BOT_TOKEN = "7430804194:AAFAXQru9th5FvmMwlaTfTbSLDb5TprpEt"
+BOT_TOKEN = "7430804194:AAFAXQru9th5FvmMwlaTfTbSLDb5TprpEtQ"
 CHAT_ID = "6460703454"
 
 app = Flask(__name__)

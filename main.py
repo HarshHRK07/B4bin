@@ -6,7 +6,7 @@ from threading import Thread
 
 # Telegram bot token and chat ID
 BOT_TOKEN = "7195510626:AAEyR3F9NH5cyMsEcObqCpFvkwCFrc6C9M4"
-CHAT_ID = "6460703454"
+CHAT_ID = " -1002163921366"
 
 app = Flask(__name__)
 

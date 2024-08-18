@@ -47,16 +47,27 @@ def send_message_to_telegram(message):
         "text": message,
         "parse_mode": "Markdown"
     }
-    try:
-        response = requests.post(url, data=payload)
-        response.raise_for_status()
-        response_data = response.json()
-        if not response_data.get("ok"):
-            print(f"Telegram API error: {response_data.get('description')}")
-        else:
-            print("Message sent successfully.")
-    except requests.exceptions.RequestException as e:
-        print(f"Error sending message to Telegram: {e}")
+    attempt = 0
+    max_attempts = 5
+    while attempt < max_attempts:
+        try:
+            response = requests.post(url, json=payload)
+            response.raise_for_status()
+            response_data = response.json()
+            if not response_data.get("ok"):
+                print(f"Telegram API error: {response_data.get('description')}")
+            else:
+                print("Message sent successfully.")
+            return
+        except requests.exceptions.RequestException as e:
+            if e.response.status_code == 429:  # Too Many Requests
+                wait_time = 2 ** attempt  # Exponential backoff
+                print(f"Rate limit exceeded. Waiting for {wait_time} seconds before retrying...")
+                time.sleep(wait_time)
+                attempt += 1
+            else:
+                print(f"Error sending message to Telegram: {e}")
+                return
 
 def generate_and_send_bins():
     while True:

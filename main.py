@@ -6,7 +6,7 @@ from threading import Thread
 
 # Telegram bot token and chat ID
 BOT_TOKEN = "7195510626:AAEyR3F9NH5cyMsEcObqCpFvkwCFrc6C9M4"
-CHAT_ID = " -1002181591571"
+CHAT_ID = "-1002181591571"  # Ensure this is in the correct format for groups
 
 app = Flask(__name__)
 
@@ -80,4 +80,4 @@ if __name__ == '__main__':
     flask_thread.start()
     
     generate_and_send_bins()
-        
+    

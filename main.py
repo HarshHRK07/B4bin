@@ -3,9 +3,9 @@ import random
 import time
 from flask import Flask
 
-# Telegram bot token and chat ID (previously provided)
-BOT_TOKEN = "7195510626:AAFtR4-XWXBGvn1xy7tuUovWnWJa-LxyCWw"
-CHAT_ID = "-1002163921366"
+# Telegram bot token and chat ID
+BOT_TOKEN = "7430804194:AAFAXQru9th5FvmMwlaTfTbSLDb5TprpEtQ"
+CHAT_ID = "6460703454"
 
 app = Flask(__name__)
 
@@ -25,11 +25,28 @@ def get_bin_info(bin_number):
         print(f"Error fetching BIN info: {e}")
         return {"error": "Failed to retrieve BIN information"}
 
+def format_bin_message(bin_number, bin_info):
+    # Label for credit BINs
+    label = "CREDIT BIN" if bin_info['type'] == "CREDIT" else "DEBIT/PREPAID BIN"
+    
+    return (
+        "━━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"🔹 BIN Generated: `{bin_number}`\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"💳 Brand: `{bin_info['brand']}`\n"
+        f"🏦 Type: {bin_info['type']} ({label})\n"
+        f"⚡ Level: `{bin_info['level']}`\n"
+        f"🏢 Bank: `{bin_info['bank']} 🏛️`\n"
+        f"🌍 Country: `{bin_info['country_name']} {bin_info['country_flag']}`\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+
 def send_message_to_telegram(message):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
-        "text": message
+        "text": message,
+        "parse_mode": "Markdown"
     }
     try:
         requests.post(url, data=payload)
@@ -42,16 +59,12 @@ def generate_and_send_bins():
         bin_info = get_bin_info(bin_number)
         
         if "error" not in bin_info:
-            message = (f"GENERATED 𝗕𝗜𝗡 ⇾ {bin_number}\n\n"
-                       f"𝗜𝗻𝗳𝗼 ⇾ {bin_info['brand']} - {bin_info['type']} - {bin_info['level']}\n"
-                       f"𝐈𝐬𝐬𝐮𝐞𝐫 ⇾ {bin_info['bank']}\n"
-                       f"𝐂𝐨𝐮𝐧𝐭𝐫𝐲 ⇾ {bin_info['country_name']} {bin_info['country_flag']}")
-            print(message)  # Print the full 10-digit BIN
+            message = format_bin_message(bin_number, bin_info)
+            print(message)  # Print the formatted BIN information
             
-            if bin_info['type'] == "CREDIT":
-                send_message_to_telegram(message)
+            send_message_to_telegram(message)  # Send message for all BIN types
             
-        time.sleep(1)  # Delay to prevent overwhelming the API
+        time.sleep(0.5)  # Delay to prevent overwhelming the API
 
 @app.route('/keep_alive')
 def keep_alive():
@@ -64,4 +77,4 @@ if __name__ == '__main__':
     flask_thread.start()
     
     generate_and_send_bins()
-    
+            

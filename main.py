@@ -11,7 +11,7 @@ CHAT_ID = "-1002181591571"  # Ensure this is in the correct format for groups
 app = Flask(__name__)
 
 def generate_bin():
-    prefix = random.choice(['4', '5'])  # '4' for Visa, '5' for MasterCard
+    prefix = random.choice(['3', '4', '5'])  # '4' for Visa, '5' for MasterCard
     bin_number = prefix + ''.join([str(random.randint(0, 9)) for _ in range(9)])  # 9 more digits
     return bin_number
 

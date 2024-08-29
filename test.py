@@ -14,10 +14,9 @@ app = Flask(__name__)
 
 def generate_bin():
     prefix = random.choice(
-        ['3', '4', '5', '34', '6',
-         '8'])  # '3' and '34' for Amex, '4' for Visa, '5' for MasterCard
+        ['4', '5'])  # '3' and '34' for Amex, '4' for Visa, '5' for MasterCard
     bin_number = prefix + ''.join(
-        [str(random.randint(0, 9)) for _ in range(9)])  # 9 more digits
+        [str(random.randint(0, 7)) for _ in range(7)])  # 9 more digits
     return bin_number
 
 
@@ -146,7 +145,7 @@ def generate_and_send_bins():
                                              api_response)
                 send_message_to_telegram(message)
 
-        time.sleep(2)  # Delay to prevent overwhelming the API
+        time.sleep(3)  # Delay to prevent overwhelming the API
 
 
 @app.route('/keep_alive')
